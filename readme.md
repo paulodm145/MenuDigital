@@ -6,9 +6,10 @@ Criar um menu para o cliente realizar o pedido, a cozinha(comida japonesa) receb
 * **CRUD** - Faz as operações básicas: CREATE, READ, UPDATE e DELETE;  
 * Utiliza as funções de Object Relation Map do Laravel(Eloquent);
 * Faz miniatura de imagens com a Biblioteca [Intervention Image](http://image.intervention.io/) ;    
-* Possui as telas de: Dashboard, Cadastro de Produtos, Menu Cliente e Menu Cozinha;  
-#Recursos Adicionais  
-Recursos que serão adicionados:  
-*Comunicação em Tempo Real com socket io ou outra biblioteca que torne o projeto viável;  
-*fazer chamada de pedidos concluídos por voz;  
+* Possui as telas de: Dashboard, Cadastro de Produtos, Menu Cliente e Menu Cozinha;    
+
+# Recursos Adicionais    
+Recursos que serão adicionados:   
+* Comunicação em Tempo Real com socket io ou outra biblioteca que torne o projeto viável;  
+* fazer chamada de pedidos concluídos por voz;  
 
