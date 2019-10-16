@@ -33,9 +33,9 @@
                <tr>
                    <td scope="row">
 
-                    <a href="{{url('produtos/'.$produto->idProduto.'/edit')}}" class="btn btn-success"> <i class="fa fa-edit"></i> </a>
-                    <a href="{{url('produtos/'.$produto->id.'/edit')}}" class="btn btn-warning"> <i class="fa fa-ban"></i> </a>
-                    <a href="{{url('produtos/'.$produto->id.'/edit')}}" class="btn btn-danger"> <i class="fa fa-trash"></i> </a>
+                    <a href="{{url( 'produtos/'.$produto->idProduto.'/edit' )}}" class="btn btn-success"> <i class="fa fa-edit"></i> </a>
+                    <a href="{{url( 'produtos/mudarstatus/'.$produto->idProduto )}}" class="btn btn-warning"> <i class="fa fa-ban"></i> </a>
+                    <a href="{{url( 'produtos/'.$produto->id.'/edit' )}}" class="btn btn-danger"> <i class="fa fa-trash"></i> </a>
 
 
                    </td>
@@ -43,7 +43,7 @@
                    <td>{{$produto->nomeProduto}}</td>
 
                    <td>
-                    @if($produto->statusProduto = 1)
+                    @if($produto->statusProduto == 1)
                        <p class="btn btn-success">Ativo</p>
                     @else
                        <p class="btn btn-danger">Cancelado</p>

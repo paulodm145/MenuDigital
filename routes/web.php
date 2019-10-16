@@ -18,3 +18,5 @@ Route::get('/', function () {
 /*** Rota Inicial para o Cadastro de Produtos */
 Route::resource('/produtos', 'ProdutosController');
 
+Route::get('produtos/mudarstatus/{id}', 'ProdutosController@bloquear');
+
