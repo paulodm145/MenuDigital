@@ -2,21 +2,16 @@
 @section('title', 'Lista de Produtos')
 @section('content')
 
-
-
 <div class="row">
-
     <div class="col-md-12">
         <H2>CADASTRO DE PRODUTOS</H2><hr>
     </div>
 
     <div class="col-md-12">
         <a href="{{url('produtos/create/')}}" class="btn btn-success"> <i class="fa fa-plus-circle"></i> Novo Produto</a>
-    </div>
+</div>
 
-
-
-    <div class="col-md-12">
+<div class="col-md-12">
     <div class="row mt-3"></div>
        <table class="table table-bordered">
            <thead>
