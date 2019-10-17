@@ -17,12 +17,28 @@ class PedidosController extends Controller
     /** métodos index - apresenta a lista de produtos para escolha */
    //Listar os Produtos Ativos
 public function index(){
+
+   /** Lista somente produtos Ativos ordenados por nome */
    $produtos = Produtos::where('statusProduto', 1)->orderBy('nomeProduto')->get();
 
-   return view('produtos.index', array(
+   /*** Definir View correpondente **/
+   return view('pedidos.index', array(
                                        'produtos' => $produtos,
                                        'buscar' => null,
-                                       ));
+                                       )
+                );
 
     }
+
+    /**Abre um novo Pedido */
+    public function create(){
+
+    }
+
+
+
+
+
+
+
 }
