@@ -19,4 +19,5 @@ Route::get('/', function () {
 Route::resource('/produtos', 'ProdutosController');
 
 Route::get('produtos/mudarstatus/{id}', 'ProdutosController@bloquear');
+Route::get('produtos/excluir/{id}', 'ProdutosController@remover');
 

@@ -37,27 +37,38 @@ class ProdutosController extends Controller
 
     }
 
+    public function remover($id){
+
+         /** Encontra um produto */
+         $produto = Produtos::find($id);
+
+         /** Verifica a existência da Imagem */
+         if( file_exists( public_path( 'storage/img/'.$produto->imagemProduto ) ) ){
+            /** Função Unlink para apagar Arquivos */
+            unlink( public_path( 'storage/img/'.$produto->imagemProduto) );
+        }
+
+        $produto->delete();
+
+        echo "<script>alert('Status Alterado com Sucesso!');</script>";
+        echo "<script>window.open('".url('/produtos')."','_self');</script>";
+
+    }
+
     public function bloquear($id){
-
-
 
         $produto = Produtos::find($id);
 
         if( $produto->statusProduto == "0" )
             { $status = "1"; }
-        else{$status = "0"; }
+        else{ $status = "0"; }
 
         $produto->statusProduto = $status;
 
-        if($produto->save()){
-
-
+        if( $produto->save() ){
             echo "<script>alert('Status Alterado com Sucesso!');</script>";
             echo "<script>window.open('".url('/produtos')."','_self');</script>";
-
         }
-
-
 
     }
 

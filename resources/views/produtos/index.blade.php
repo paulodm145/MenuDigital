@@ -35,11 +35,11 @@
 
                     <a href="{{url( 'produtos/'.$produto->idProduto.'/edit' )}}" class="btn btn-success"> <i class="fa fa-edit"></i> </a>
                     <a href="{{url( 'produtos/mudarstatus/'.$produto->idProduto )}}" class="btn btn-warning"> <i class="fa fa-ban"></i> </a>
-                    <a href="{{url( 'produtos/'.$produto->id.'/edit' )}}" class="btn btn-danger"> <i class="fa fa-trash"></i> </a>
+                    <a href="{{url( 'produtos/excluir/'.$produto->idProduto )}}" class="btn btn-danger"> <i class="fa fa-trash"></i> </a>
 
 
                    </td>
-                   <td><img src="{{ url('/storage/img/'.$produto->imagemProduto) }}" width="150px" height="150px" alt="..." class="img-thumbnail"></td>
+                   <td><img src="{{ url('/storage/img/'.$produto->imagemProduto) }}" width="75px" height="75px" alt="..." class="img-thumbnail"></td>
                    <td>{{$produto->nomeProduto}}</td>
 
                    <td>
