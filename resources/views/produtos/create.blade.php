@@ -51,10 +51,19 @@
 
         <div class="form-row">
         <div class="form-group col-12">
+          <label for="imagem">Descrição:</label>
+          <textarea name="descricaoproduto" class="form-control" id="descricaoproduto" cols="20" rows="5"></textarea>
+        </div>
+        </div>
+
+        <div class="form-row">
+        <div class="form-group col-12">
           <label for="imagem">Imagem:</label>
           <input type="file" class="form-control-file" name="imagem" id="" placeholder="" aria-describedby="fileHelpId">
         </div>
         </div>
+
+
 
         <div class="form-row">
         <div class="form-group col-8">

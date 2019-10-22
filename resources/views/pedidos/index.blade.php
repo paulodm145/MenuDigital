@@ -17,7 +17,8 @@
     </div>
 
     <div class="col-6">
-       <strong>{{$produto->nomeProduto}}</strong>
+       <strong>{{$produto->nomeProduto}}</strong><br>
+       <p class="text-muted">{{$produto->descricaoProduto}}</p>
     </div>
 
     <div class="col-2">
@@ -39,4 +40,12 @@
 </div><!-- end div row -->
 </span>
 @endforeach
+
+<button id="listartbl">listar itens</button>
+
+<div id="tblListar">
+
+</div>
+
+
 @endsection

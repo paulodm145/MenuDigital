@@ -109,6 +109,7 @@ class ProdutosController extends Controller
         $produto->nomeProduto = $request->input('nomeproduto');
         $produto->tipoProduto = $request->input('tipoproduto');
         $produto->statusProduto = $request->input('statusproduto');
+        $produto->descricaoProduto = $request->input('descricaoproduto');
         $produto->imagemProduto = $nameFile;
 
         /** Salva o produto e exibe a mensagem de sucesso */
@@ -168,6 +169,7 @@ class ProdutosController extends Controller
         $produto->nomeProduto = $request->input('nomeproduto');
         $produto->tipoProduto = $request->input('tipoproduto');
         $produto->statusProduto = $request->input('statusproduto');
+        $produto->descricaoProduto = $request->input('descricaoproduto');
         $produto->imagemProduto = $nameFile;
 
         /** Salva o produto e exibe a mensagem de sucesso */

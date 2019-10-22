@@ -19,6 +19,7 @@ class CreateProdutosTable extends Migration
             $table->string('tipoProduto');
             $table->string('statusProduto');
             $table->string('imagemProduto');
+            $table->string('descricaoProduto');
             $table->timestamps();
         });
     }

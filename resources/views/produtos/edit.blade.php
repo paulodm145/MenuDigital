@@ -65,6 +65,16 @@
         </div>
         </div>
 
+
+        <div class="form-row">
+        <div class="form-group col-12">
+          <label for="imagem">Descrição:</label>
+          <textarea name="descricaoproduto" class="form-control" id="descricaoproduto" cols="20" rows="5">
+            {{$produto->descricaoProduto}}
+          </textarea>
+        </div>
+        </div>
+
         <div class="form-row">
         <div class="form-group col-12">
           <label for="imagem">Imagem:</label>

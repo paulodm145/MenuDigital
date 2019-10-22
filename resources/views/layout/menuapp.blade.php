@@ -50,26 +50,97 @@
 $(function(){
 
     tbItems = [];
+    console.log("Tamanho Inicial: "+tbItems.length);
     localStorage.setItem("tbItemPedido", []);
+
 });
+
+
+
 
 
 function clickbtn(idNumber, idProd){
 
     const qty = $('#'+idNumber).val();
-    var ItemPed = JSON.stringify({
-        Codigo   : idProd,
-        Quantidade : qty
-    });
+    var codigo = idProd;
 
+    const tamanho = localStorage.getItem( 'tbItemPedido' ).length;
+    /** Adiciona normalmente se o array estiver vazio */
+    if(tamanho == 0){
 
-    tbItems.push(ItemPed);
-    localStorage.setItem("tbItemPedido", JSON.stringify(tbItems));
+        var ItemPed = {
+                        Codigo   : parseInt(idProd),
+                        Quantidade : parseInt(qty)
+                        };
 
-    console.log(tbItems);
+        tbItems.push(ItemPed);
+        localStorage.setItem("tbItemPedido", JSON.stringify(tbItems));
+        alert('Produto Adicionado !');
 
+    }else{
 
+        /** Recebo os dados Armazenados */
+        TabelaPedido = localStorage.getItem( 'tbItemPedido' );
+
+        /** Transforma em um objeto de dados */
+        meu_array = JSON.parse(TabelaPedido);
+
+        var indice = meu_array.indexOf(meu_array.filter(function(obj) {
+        return obj.Codigo == parseInt(codigo);
+         })[0]);
+
+         /**Maior ou igual a zero encontra o produto */
+        if(indice >= 0){
+
+            /** Remove o Indice */
+            meu_array.splice( indice, 1 );
+
+            /** MOnta o novo Item */
+            var ItemPed = {
+                        Codigo   : parseInt(idProd),
+                        Quantidade : parseInt(qty)
+                        };
+            /** Atualiza o Array */
+            meu_array.push(ItemPed);
+
+            /**Lança no LocalStorage */
+            localStorage.clear(); /**Remove os valores Anteriores e atualiza com o novo valor */
+
+            localStorage.setItem("tbItemPedido", JSON.stringify(meu_array));
+            alert('Produto Adicionado !');
+
+        }else {
+
+            var ItemPed = {
+                        Codigo   : parseInt(idProd),
+                        Quantidade : parseInt(qty)
+
+                        };
+
+            tbItems.push(ItemPed);
+            localStorage.setItem("tbItemPedido", JSON.stringify(tbItems));
+            alert('Produto Adicionado !');
+
+        }
+    }
 }
+
+
+
+$("#listartbl").on('click', () => {
+
+ /** ************************************* */
+
+       bola = JSON.parse(localStorage.getItem( 'tbItemPedido' ) );
+
+
+
+
+
+/** *************************************** */
+});
+
+
   </script>
 
   </body>

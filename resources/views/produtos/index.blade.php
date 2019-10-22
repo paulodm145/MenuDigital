@@ -16,7 +16,7 @@
        <table class="table table-bordered">
            <thead>
                <tr>
-                   <th>Opções</th>
+                   <th style="width:200px">Opções</th>
                    <th>Produto</th>
                    <th>Nome Produto</th>
                    <th>Tipo Produto</th>
@@ -35,7 +35,12 @@
 
                    </td>
                    <td><img src="{{ url('/storage/img/'.$produto->imagemProduto) }}" width="75px" height="75px" alt="..." class="img-thumbnail"></td>
-                   <td>{{$produto->nomeProduto}}</td>
+                   <td>
+
+                   <strong class="text-success">{{$produto->nomeProduto}}</strong>
+                   <br>
+                   {{$produto->descricaoProduto}}
+                   </td>
 
                    <td>
                     @if($produto->statusProduto == 1)
