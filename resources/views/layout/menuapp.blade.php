@@ -45,19 +45,29 @@
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
-  <script>
+<script>
 
 $(function(){
-
     tbItems = [];
-    console.log("Tamanho Inicial: "+tbItems.length);
     localStorage.setItem("tbItemPedido", []);
-
 });
 
+function remover(idProd){
 
+    var listalocal = localStorage.getItem( 'tbItemPedido' );
+    list = JSON.parse(listalocal);
 
+    var indice = list.indexOf(list.filter(function(obj) {
+                                        return obj.Codigo == parseInt(idProd);
+                                        })[0]);
+    list.splice( indice, 1 );
+    localStorage.setItem("tbItemPedido", JSON.stringify(list));
+    $('#qtd'+idProd).val('');
+    alert(' Produto Excluído com SUCESSO !!! ');
 
+    /** Limpar o textbox */
+
+}
 
 function clickbtn(idNumber, idProd){
 
@@ -67,34 +77,26 @@ function clickbtn(idNumber, idProd){
     const tamanho = localStorage.getItem( 'tbItemPedido' ).length;
     /** Adiciona normalmente se o array estiver vazio */
     if(tamanho == 0){
-
         var ItemPed = {
                         Codigo   : parseInt(idProd),
                         Quantidade : parseInt(qty)
                         };
-
         tbItems.push(ItemPed);
         localStorage.setItem("tbItemPedido", JSON.stringify(tbItems));
         alert('Produto Adicionado !');
 
     }else{
-
         /** Recebo os dados Armazenados */
         TabelaPedido = localStorage.getItem( 'tbItemPedido' );
-
         /** Transforma em um objeto de dados */
         meu_array = JSON.parse(TabelaPedido);
-
         var indice = meu_array.indexOf(meu_array.filter(function(obj) {
-        return obj.Codigo == parseInt(codigo);
-         })[0]);
-
+                                        return obj.Codigo == parseInt(codigo);
+                                        })[0]);
          /**Maior ou igual a zero encontra o produto */
         if(indice >= 0){
-
             /** Remove o Indice */
             meu_array.splice( indice, 1 );
-
             /** MOnta o novo Item */
             var ItemPed = {
                         Codigo   : parseInt(idProd),
@@ -102,25 +104,24 @@ function clickbtn(idNumber, idProd){
                         };
             /** Atualiza o Array */
             meu_array.push(ItemPed);
-
             /**Lança no LocalStorage */
-            localStorage.clear(); /**Remove os valores Anteriores e atualiza com o novo valor */
-
+            //localStorage.clear(); /**Remove os valores Anteriores e atualiza com o novo valor */
             localStorage.setItem("tbItemPedido", JSON.stringify(meu_array));
-            alert('Produto Adicionado !');
-
+            alert('Produto Adicionado 2!');
         }else {
 
-            var ItemPed = {
+            var listaLocal = localStorage.getItem( 'tbItemPedido' );
+
+            listaLocalArray = JSON.parse(listaLocal);
+
+            var AddPedido = {
                         Codigo   : parseInt(idProd),
                         Quantidade : parseInt(qty)
-
                         };
 
-            tbItems.push(ItemPed);
-            localStorage.setItem("tbItemPedido", JSON.stringify(tbItems));
-            alert('Produto Adicionado !');
-
+            listaLocalArray.push(AddPedido);
+            localStorage.setItem("tbItemPedido", JSON.stringify(listaLocalArray));
+            alert('Produto Adicionado 3!');
         }
     }
 }
@@ -128,20 +129,13 @@ function clickbtn(idNumber, idProd){
 
 
 $("#listartbl").on('click', () => {
-
  /** ************************************* */
-
        bola = JSON.parse(localStorage.getItem( 'tbItemPedido' ) );
-
-
-
-
-
 /** *************************************** */
 });
 
 
-  </script>
+</script>
 
   </body>
 </html>
