@@ -9,6 +9,7 @@
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href=" {{ URL::to('css/bootstrap.min.css') }}" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+
   </head>
   <body style="min-height: 75rem; padding-top: 4.5rem;">
 
@@ -34,6 +35,8 @@
         </ul>
 
 
+
+
       </div>
     </nav>
 
@@ -42,7 +45,8 @@
       </div>
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script
+  src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
 <script>
@@ -69,7 +73,7 @@ function remover(idProd){
 
 }
 
-function clickbtn(idNumber, idProd){
+function clickbtn(idNumber, idProd, nomeProduto, imagemProduto, descricaoProduto){
 
     const qty = $('#'+idNumber).val();
     var codigo = idProd;
@@ -79,7 +83,10 @@ function clickbtn(idNumber, idProd){
     if(tamanho == 0){
         var ItemPed = {
                         Codigo   : parseInt(idProd),
-                        Quantidade : parseInt(qty)
+                        Quantidade : parseInt(qty),
+                        NomeProduto: nomeProduto,
+                        ImagemProduto: imagemProduto,
+                        DescricaoProduto: descricaoProduto
                         };
         tbItems.push(ItemPed);
         localStorage.setItem("tbItemPedido", JSON.stringify(tbItems));
@@ -100,7 +107,10 @@ function clickbtn(idNumber, idProd){
             /** MOnta o novo Item */
             var ItemPed = {
                         Codigo   : parseInt(idProd),
-                        Quantidade : parseInt(qty)
+                        Quantidade : parseInt(qty),
+                        NomeProduto: nomeProduto,
+                        ImagemProduto: imagemProduto,
+                        DescricaoProduto: descricaoProduto
                         };
             /** Atualiza o Array */
             meu_array.push(ItemPed);
@@ -116,12 +126,15 @@ function clickbtn(idNumber, idProd){
 
             var AddPedido = {
                         Codigo   : parseInt(idProd),
-                        Quantidade : parseInt(qty)
+                        Quantidade : parseInt(qty),
+                        NomeProduto: nomeProduto,
+                        ImagemProduto: imagemProduto,
+                        DescricaoProduto: descricaoProduto
                         };
 
             listaLocalArray.push(AddPedido);
             localStorage.setItem("tbItemPedido", JSON.stringify(listaLocalArray));
-            alert('Produto Adicionado 3!');
+            alert('Produto Adicionado !');
         }
     }
 }
@@ -130,8 +143,97 @@ function clickbtn(idNumber, idProd){
 
 $("#listartbl").on('click', () => {
  /** ************************************* */
-       bola = JSON.parse(localStorage.getItem( 'tbItemPedido' ) );
+      var listaPedido = localStorage.getItem("tbItemPedido");
+
+      if (listaPedido === "") {
+        alert('Adicione um Produto ao Pedido');
+      }else{
+
+
+            var listatbl = JSON.parse(listaPedido);
+
+            var headertbl = `<div class='col-12'>
+
+            <p class='text-success'> <strong>Items do seu Pedido</strong> </p>
+            <button class='btn btn-success' id="btnenviar" >Enviar Pedido</button>
+            <button class='btn btn-danger' id="pedirmais" >Pedir Mais...</button>
+
+                                <table style='width=100%; margin-top:15px' class="table table-striped table-inverse table-responsive">
+                                    <thead class="thead-inverse">
+                                        <tr>
+                                            <th>Imagem</th>
+                                            <th>Produto</th>
+                                            <th>Quantidade</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody> `;
+
+                var total = listatbl.length;
+                var i;
+                var nitems = 0;
+                var txt="";
+
+                for(i=0; i<total; i++){
+
+                    nitems = listatbl[i].Quantidade+ nitems;
+                        txt += `<tr>
+
+                                    <td scope="row"><img src="${listatbl[i].ImagemProduto}" width="75px" height="75px" alt="..." class="img-thumbnail"></td>
+                                    <td><strong> ${listatbl[i].NomeProduto} </strong> <p class="text-mutted">${listatbl[i].DescricaoProduto}</p></td>
+                                    <td> ${listatbl[i].Quantidade} </td>
+                                </tr> `;
+
+                        }
+                    var footertbl = `</tbody></table></div><p class='btn btn-danger'>Items Pedidos: ${nitems}<p>`;
+
+                    $('#conteudo').slideUp('slow');
+                    $('#listapedido').html(headertbl+txt+footertbl).show('slow');
+
+
+                }
 /** *************************************** */
+$("#pedirmais").on('click', function () {
+    $('#conteudo').slideUp('slow').show();
+    $('#listapedido').html('').hide('slow');
+});
+
+$("#btnenviar").on('click', function () {
+    window.location.reload();
+    alert('Pedido Enviado Com Sucesso !');
+});
+/**------------------ */
+});
+
+
+
+
+/** Buscar Json de produtos e lança no localStorage */
+$(document).ready(function(){
+	// api/produtos/lista
+    $.getJSON("{{url('')}}/api/produtos/lista",
+        function (data) {
+            localStorage.setItem("ListaGeraldeProdutos", JSON.stringify(data));
+        }
+    );
+ });
+
+/**buscar registro no json acumulado no local */
+ $(document).ready(function() {
+    $("#busca").keyup(function(){
+
+        var LocalTabelaPedido = localStorage.getItem( 'ListaGeraldeProdutos' );
+        var tblPedido = JSON.parse(LocalTabelaPedido);
+
+
+
+        //var pesquisa = $(this).val();
+       // var dados = pesquisa;
+        console.log( Object.keys(tblPedido) );
+
+
+
+
+    })
 });
 
 
