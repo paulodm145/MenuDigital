@@ -56,6 +56,8 @@ $(function(){
     localStorage.setItem("tbItemPedido", []);
 });
 
+
+
 function remover(idProd){
 
     var listalocal = localStorage.getItem( 'tbItemPedido' );
@@ -73,6 +75,7 @@ function remover(idProd){
 
 }
 
+
 function clickbtn(idNumber, idProd, nomeProduto, imagemProduto, descricaoProduto){
 
     const qty = $('#'+idNumber).val();
@@ -81,9 +84,10 @@ function clickbtn(idNumber, idProd, nomeProduto, imagemProduto, descricaoProduto
     const tamanho = localStorage.getItem( 'tbItemPedido' ).length;
     /** Adiciona normalmente se o array estiver vazio */
     if(tamanho == 0){
+        $('#'+idNumber).val(1);
         var ItemPed = {
                         Codigo   : parseInt(idProd),
-                        Quantidade : parseInt(qty),
+                        Quantidade : 1,
                         NomeProduto: nomeProduto,
                         ImagemProduto: imagemProduto,
                         DescricaoProduto: descricaoProduto
@@ -95,19 +99,26 @@ function clickbtn(idNumber, idProd, nomeProduto, imagemProduto, descricaoProduto
     }else{
         /** Recebo os dados Armazenados */
         TabelaPedido = localStorage.getItem( 'tbItemPedido' );
+
         /** Transforma em um objeto de dados */
         meu_array = JSON.parse(TabelaPedido);
         var indice = meu_array.indexOf(meu_array.filter(function(obj) {
                                         return obj.Codigo == parseInt(codigo);
                                         })[0]);
          /**Maior ou igual a zero encontra o produto */
+
         if(indice >= 0){
+
             /** Remove o Indice */
             meu_array.splice( indice, 1 );
+
+            var quantidadeprod = parseInt(qty)+1;
+
+            $('#'+idNumber).val( quantidadeprod );
             /** MOnta o novo Item */
             var ItemPed = {
                         Codigo   : parseInt(idProd),
-                        Quantidade : parseInt(qty),
+                        Quantidade : quantidadeprod,
                         NomeProduto: nomeProduto,
                         ImagemProduto: imagemProduto,
                         DescricaoProduto: descricaoProduto
@@ -115,18 +126,19 @@ function clickbtn(idNumber, idProd, nomeProduto, imagemProduto, descricaoProduto
             /** Atualiza o Array */
             meu_array.push(ItemPed);
             /**Lança no LocalStorage */
-            //localStorage.clear(); /**Remove os valores Anteriores e atualiza com o novo valor */
+
             localStorage.setItem("tbItemPedido", JSON.stringify(meu_array));
-            alert('Produto Adicionado 2!');
+
+
         }else {
 
             var listaLocal = localStorage.getItem( 'tbItemPedido' );
 
             listaLocalArray = JSON.parse(listaLocal);
-
+            $('#'+idNumber).val(1);
             var AddPedido = {
                         Codigo   : parseInt(idProd),
-                        Quantidade : parseInt(qty),
+                        Quantidade : 1,
                         NomeProduto: nomeProduto,
                         ImagemProduto: imagemProduto,
                         DescricaoProduto: descricaoProduto
@@ -134,7 +146,7 @@ function clickbtn(idNumber, idProd, nomeProduto, imagemProduto, descricaoProduto
 
             listaLocalArray.push(AddPedido);
             localStorage.setItem("tbItemPedido", JSON.stringify(listaLocalArray));
-            alert('Produto Adicionado !');
+
         }
     }
 }
@@ -223,15 +235,63 @@ $(document).ready(function(){
 
         var LocalTabelaPedido = localStorage.getItem( 'ListaGeraldeProdutos' );
         var tblPedido = JSON.parse(LocalTabelaPedido);
-
-
-
-        //var pesquisa = $(this).val();
+        var pesquisa = $(this).val();
        // var dados = pesquisa;
-        console.log( Object.keys(tblPedido) );
+/** ----------------------------------------------------------------------------------- */
+$.getJSON("{{url('')}}/api/produtos/"+pesquisa,
+    function (data) {
+        var mostraTxt = '';
+
+        $(".ProdutosListados").html('');
+        $(".produtodetalhe").html('');
+
+        for(var z = 0; z < data.length; z++){
+
+           mostraTxt += `
+
+           <div class="row produtodetalhe" >
+
+<div class="col-12"  style="border-bottom: dashed 1px #ccc;padding-top:15px;  padding-bottom: 15px" >
+
+    <div class="row">
+
+    <div class="col-2" style="max-width:100px;">
+        <img src="{{url('')}}/storage/img/${data[z].imagemProduto}" width="75px" height="75px" alt="..." class="img-thumbnail">
+    </div>
+
+    <div class="col-6">
+       <strong>${data[z].nomeProduto}</strong><br>
+       <p class="text-muted">${data[z].descricaoProduto}</p>
+    </div>
 
 
+    <div class="col-2">
+        <input type="number" step="1" class="form-control qty" id="qtd${data[z].idProduto}" name="qtd[]" placeholder="0,00" required>
 
+    </div>
+
+    <div class="col-2">
+        <button class="btn btn-success" onclick="clickbtn( 'qtd${data[z].idProduto}', '${data[z].idProduto}', '${data[z].nomeProduto}','{{ url('').'/storage/img/'}}${data[z].imagemProduto}' , '${data[z].descricaoProduto}')"  id="btn_plus_${data[z].idProduto}"><i class="fa fa-plus-circle" aria-hidden="true"></i></button>
+        <button class="btn btn-danger" name="menos_${data[z].idProduto}" onclick="remover( '${data[z].idProduto}' )"  id="btn_minus_${data[z].idProduto}"><i class="fa fa-minus-circle" aria-hidden="true"></i></button>
+    </div>
+
+    </div>
+
+
+</div>
+
+
+</div><!-- end div row -->
+
+           `;
+
+        }
+
+        $(".ProdutosListados").html(mostraTxt);
+
+    }
+);
+/** ----------------------------------------------------------------------------------- */
 
     })
 });

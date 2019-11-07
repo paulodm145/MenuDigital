@@ -21,4 +21,12 @@ class ListaController extends Controller
 
     }
 
+    public function show($id){
+        /**Filtra pelo id do produto */
+        $produtos = Produtos::where('nomeProduto', 'LIKE', '%'.$id.'%')
+                            ->orwhere('descricaoProduto', 'LIKE', '%'.$id.'%')
+                            ->get();
+        return response()->json($produtos);
+    }
+
 }

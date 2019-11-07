@@ -19,3 +19,7 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 
 /** MOnta o JSON */
 Route::get('produtos/lista', 'ListaController@index');
+
+/** Retorna Pesquisa */
+Route::resource('/produtos', 'ListaController');
+

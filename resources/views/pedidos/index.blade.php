@@ -21,9 +21,12 @@
     </div>
 </div>
 
+<div class="row ProdutosListados" >
+</div>
+
 @foreach($produtos as $produto)
 
-<div class="row " >
+<div class="row produtodetalhe" >
 
 <div class="col-12"  style="border-bottom: dashed 1px #ccc;padding-top:15px;  padding-bottom: 15px" >
 
