@@ -21,10 +21,14 @@
     </div>
 </div>
 
-<div class="row ProdutosListados" >
-</div>
+
+<div class="row" id="MostraBusca"></div>
+
+<div class="row ProdutosListados" ></div>
 
 @foreach($produtos as $produto)
+
+
 
 <div class="row produtodetalhe" >
 

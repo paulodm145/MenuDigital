@@ -71,7 +71,7 @@ function remover(idProd){
     $('#qtd'+idProd).val('');
     alert(' Produto Excluído com SUCESSO !!! ');
 
-    /** Limpar o textbox */
+
 
 }
 
@@ -106,9 +106,7 @@ function clickbtn(idNumber, idProd, nomeProduto, imagemProduto, descricaoProduto
                                         return obj.Codigo == parseInt(codigo);
                                         })[0]);
          /**Maior ou igual a zero encontra o produto */
-
         if(indice >= 0){
-
             /** Remove o Indice */
             meu_array.splice( indice, 1 );
 
@@ -238,54 +236,55 @@ $(document).ready(function(){
         var pesquisa = $(this).val();
        // var dados = pesquisa;
 /** ----------------------------------------------------------------------------------- */
+
 $.getJSON("{{url('')}}/api/produtos/"+pesquisa,
     function (data) {
         var mostraTxt = '';
+
+        const ProdutosdoPedido = localStorage.getItem( 'tbItemPedido' );
+
+         /** transformando em Json */
+         var Prod = JSON.parse(ProdutosdoPedido);
 
         $(".ProdutosListados").html('');
         $(".produtodetalhe").html('');
 
         for(var z = 0; z < data.length; z++){
 
+            /** Converter o Valor a ser procurado em Inteiro */
+            var numero = parseInt(data[z].idProduto);
+
+            var indice = Prod.indexOf(Prod.filter(function(obj) {
+                                        return obj.Codigo == numero;
+                                        })[0]);
+
+            if(indice >= 0)
+                { var quanLista = Prod[indice]['Quantidade']; }
+            else{ var quanLista = '0';}
+
+
            mostraTxt += `
+            <div class="row produtodetalhe" >
+                <div class="col-12"  style="border-bottom: dashed 1px #ccc;padding-top:15px;  padding-bottom: 15px" >
+                    <div class="row">
+                    <div class="col-2" style="max-width:100px;">
+                        <img src="{{url('')}}/storage/img/${data[z].imagemProduto}" width="75px" height="75px" alt="..." class="img-thumbnail">
+                    </div>
+                    <div class="col-6">
+                    <strong>${data[z].nomeProduto}</strong><br>
+                    <p class="text-muted">${data[z].descricaoProduto}</p>
+                    </div>
+                    <div class="col-2">
+                        <input type="number" value='${quanLista}' step="1" value='0' class="form-control qty" id="qtd${data[z].idProduto}" name="qtd[]" placeholder="0,00" required>
 
-           <div class="row produtodetalhe" >
-
-<div class="col-12"  style="border-bottom: dashed 1px #ccc;padding-top:15px;  padding-bottom: 15px" >
-
-    <div class="row">
-
-    <div class="col-2" style="max-width:100px;">
-        <img src="{{url('')}}/storage/img/${data[z].imagemProduto}" width="75px" height="75px" alt="..." class="img-thumbnail">
-    </div>
-
-    <div class="col-6">
-       <strong>${data[z].nomeProduto}</strong><br>
-       <p class="text-muted">${data[z].descricaoProduto}</p>
-    </div>
-
-
-    <div class="col-2">
-        <input type="number" step="1" class="form-control qty" id="qtd${data[z].idProduto}" name="qtd[]" placeholder="0,00" required>
-
-    </div>
-
-    <div class="col-2">
-        <button class="btn btn-success" onclick="clickbtn( 'qtd${data[z].idProduto}', '${data[z].idProduto}', '${data[z].nomeProduto}','{{ url('').'/storage/img/'}}${data[z].imagemProduto}' , '${data[z].descricaoProduto}')"  id="btn_plus_${data[z].idProduto}"><i class="fa fa-plus-circle" aria-hidden="true"></i></button>
-        <button class="btn btn-danger" name="menos_${data[z].idProduto}" onclick="remover( '${data[z].idProduto}' )"  id="btn_minus_${data[z].idProduto}"><i class="fa fa-minus-circle" aria-hidden="true"></i></button>
-    </div>
-
-    </div>
-
-
-</div>
-
-
-</div><!-- end div row -->
-
-           `;
-
-        }
+                    </div>
+                    <div class="col-2">
+                        <button class="btn btn-success" onclick="clickbtn( 'qtd${data[z].idProduto}', '${data[z].idProduto}', '${data[z].nomeProduto}','{{ url('').'/storage/img/'}}${data[z].imagemProduto}' , '${data[z].descricaoProduto}')"  id="btn_plus_${data[z].idProduto}"><i class="fa fa-plus-circle" aria-hidden="true"></i></button>
+                        <button class="btn btn-danger" name="menos_${data[z].idProduto}" onclick="remover( '${data[z].idProduto}' )"  id="btn_minus_${data[z].idProduto}"><i class="fa fa-minus-circle" aria-hidden="true"></i></button>
+                    </div>
+                    </div>
+                </div>
+            </div><!-- end div row -->`;}
 
         $(".ProdutosListados").html(mostraTxt);
 
