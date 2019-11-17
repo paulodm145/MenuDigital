@@ -23,3 +23,6 @@ Route::get('produtos/lista', 'ListaController@index');
 /** Retorna Pesquisa */
 Route::resource('/produtos', 'ListaController');
 
+/** Apontando Post para o Controlador */
+Route::post('/pedidos/store', 'PedidosController@store');
+

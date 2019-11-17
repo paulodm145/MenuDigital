@@ -5,7 +5,7 @@
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-
+    <meta name="csrf-token" content="{{ csrf_token() }}" />
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href=" {{ URL::to('css/bootstrap.min.css') }}" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
@@ -21,17 +21,9 @@
       <div class="collapse navbar-collapse" id="navbarCollapse">
         <ul class="navbar-nav mr-auto">
           <li class="nav-item active">
-            <a class="nav-link" href="#">Início <span class="sr-only">(current)</span></a>
+            <a class="nav-link" href="#" id="nomeCliente">Início <span class="sr-only">(current)</span></a>
           </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#">Pedidos</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#">Produtos</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link disabled" href="#">Disabled</a>
-          </li>
+
         </ul>
 
 
@@ -54,6 +46,8 @@
 $(function(){
     tbItems = [];
     localStorage.setItem("tbItemPedido", []);
+    var txtNome = localStorage.getItem("nomeCliente");
+    $("#nomeCliente").text( `Olá!, ${txtNome} Selecione os itens do seu Pedido.` );
 });
 
 
@@ -207,9 +201,48 @@ $("#pedirmais").on('click', function () {
     $('#listapedido').html('').hide('slow');
 });
 
-$("#btnenviar").on('click', function () {
-    window.location.reload();
-    alert('Pedido Enviado Com Sucesso !');
+$.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+            });
+
+$("#btnenviar").on('click', function (e) {
+    //location.href="{{ url('') }}/"
+
+    e.preventDefault();
+
+    var nomeCliente = localStorage.getItem('nomeCliente');
+    var lp = JSON.parse(localStorage.getItem('tbItemPedido'));
+
+    var dados = {nomeCliente:nomeCliente,
+                  itemdoPedido: lp
+                };
+/** ---------------------- ENVIAR O PEDIDO --------------- */
+$.ajax({
+            type: 'POST',
+            dataType:'json',
+            url: "{{url('')}}/api/pedidos/store",
+            data: dados,
+                success: function(r) {
+
+                    if(r.Mensagem == 1){
+                        alert('Pedido ENVIADO com Sucesso !','','OK');
+                        location.href="{{ url('') }}/ ";
+                     }else{
+                        alert('Você já Votou!');
+                        location.href="{{ url('') }}/pedidos "
+                    }
+
+                },
+            error: function(e) {
+            alert('Error: ' + e.message);
+            }
+        });
+		return false;
+
+
+/** ------------------------------------------------------ */
 });
 /**------------------ */
 });
@@ -232,6 +265,8 @@ $(document).ready(function(){
     $("#busca").keyup(function(){
 
         var LocalTabelaPedido = localStorage.getItem( 'ListaGeraldeProdutos' );
+
+
         var tblPedido = JSON.parse(LocalTabelaPedido);
         var pesquisa = $(this).val();
        // var dados = pesquisa;
@@ -241,14 +276,30 @@ $.getJSON("{{url('')}}/api/produtos/"+pesquisa,
     function (data) {
         var mostraTxt = '';
 
-        const ProdutosdoPedido = localStorage.getItem( 'tbItemPedido' );
+        var verifica =  localStorage.getItem( 'tbItemPedido' ).length;
+
+        if( verifica == 0 )
+        {
+
+            tamanhoProd = 0;
+        }else{
+                const ProdutosdoPedido = localStorage.getItem( 'tbItemPedido' );
+                var Prod = JSON.parse(ProdutosdoPedido);
+                var tamanhoProd = Prod.length;
+                console.log('diferente de zero')
+            }
 
          /** transformando em Json */
-         var Prod = JSON.parse(ProdutosdoPedido);
 
-        $(".ProdutosListados").html('');
-        $(".produtodetalhe").html('');
 
+
+            $(".ProdutosListados").html('');
+            $(".produtodetalhe").html('');
+
+if( tamanhoProd > 0 ){
+
+
+        /** Início do FOR */
         for(var z = 0; z < data.length; z++){
 
             /** Converter o Valor a ser procurado em Inteiro */
@@ -258,6 +309,7 @@ $.getJSON("{{url('')}}/api/produtos/"+pesquisa,
                                         return obj.Codigo == numero;
                                         })[0]);
 
+
             if(indice >= 0)
                 { var quanLista = Prod[indice]['Quantidade']; }
             else{ var quanLista = '0';}
@@ -265,30 +317,65 @@ $.getJSON("{{url('')}}/api/produtos/"+pesquisa,
 
            mostraTxt += `
             <div class="row produtodetalhe" >
-                <div class="col-12"  style="border-bottom: dashed 1px #ccc;padding-top:15px;  padding-bottom: 15px" >
+                <div class="col-12 "  style="border-bottom: dashed 1px #ccc;padding-top:15px;  padding-bottom: 15px; widht:100%" >
                     <div class="row">
-                    <div class="col-2" style="max-width:100px;">
-                        <img src="{{url('')}}/storage/img/${data[z].imagemProduto}" width="75px" height="75px" alt="..." class="img-thumbnail">
-                    </div>
-                    <div class="col-6">
-                    <strong>${data[z].nomeProduto}</strong><br>
-                    <p class="text-muted">${data[z].descricaoProduto}</p>
-                    </div>
-                    <div class="col-2">
-                        <input type="number" value='${quanLista}' step="1" value='0' class="form-control qty" id="qtd${data[z].idProduto}" name="qtd[]" placeholder="0,00" required>
-
-                    </div>
-                    <div class="col-2">
-                        <button class="btn btn-success" onclick="clickbtn( 'qtd${data[z].idProduto}', '${data[z].idProduto}', '${data[z].nomeProduto}','{{ url('').'/storage/img/'}}${data[z].imagemProduto}' , '${data[z].descricaoProduto}')"  id="btn_plus_${data[z].idProduto}"><i class="fa fa-plus-circle" aria-hidden="true"></i></button>
-                        <button class="btn btn-danger" name="menos_${data[z].idProduto}" onclick="remover( '${data[z].idProduto}' )"  id="btn_minus_${data[z].idProduto}"><i class="fa fa-minus-circle" aria-hidden="true"></i></button>
-                    </div>
+                        <div class="col-2 ">
+                            <img src="{{url('')}}/storage/img/${data[z].imagemProduto}" width="75px" height="75px" alt="..." class="img-thumbnail">
+                        </div>
+                        <div class="col-6 ">
+                            <strong>${data[z].nomeProduto}</strong><br>
+                            <p class="text-muted">${data[z].descricaoProduto}</p>
+                        </div>
+                        <div class="col-2 ">
+                            <input type="number" value='${quanLista}' step="1" value='0' class="form-control qty" id="qtd${data[z].idProduto}" name="qtd[]" placeholder="0,00" required>
+                        </div>
+                        <div class="col-2 ">
+                            <button class="btn btn-success" onclick="clickbtn( 'qtd${data[z].idProduto}', '${data[z].idProduto}', '${data[z].nomeProduto}','{{ url('').'/storage/img/'}}${data[z].imagemProduto}' , '${data[z].descricaoProduto}')"  id="btn_plus_${data[z].idProduto}"><i class="fa fa-plus-circle" aria-hidden="true"></i></button>
+                            <button class="btn btn-danger" name="menos_${data[z].idProduto}" onclick="remover( '${data[z].idProduto}' )"  id="btn_minus_${data[z].idProduto}"><i class="fa fa-minus-circle" aria-hidden="true"></i></button>
+                        </div>
                     </div>
                 </div>
-            </div><!-- end div row -->`;}
+            </div><!-- end div row -->`;
+            } /** Final do FOR */
+}else{
+
+/** --------------------------------------------------------------------------- */
+for(var z = 0; z < data.length; z++){
+
+var quaLista = 0;
+
+
+mostraTxt += `
+<div class="row produtodetalhe" >
+    <div class="col-12 "  style="border-bottom: dashed 1px #ccc;padding-top:15px;  padding-bottom: 15px; widht:100%" >
+        <div class="row">
+            <div class="col-2">
+                <img src="{{url('')}}/storage/img/${data[z].imagemProduto}" width="75px" height="75px" alt="..." class="img-thumbnail">
+            </div>
+            <div class="col-6">
+                <strong>${data[z].nomeProduto}</strong><br>
+                <p class="text-muted">${data[z].descricaoProduto}</p>
+            </div>
+            <div class="col-2 ">
+                <input type="number" value='${quanLista}' step="1" value='0' class="form-control qty" id="qtd${data[z].idProduto}" name="qtd[]" placeholder="0,00" required>
+            </div>
+            <div class="col-2 ">
+                <button class="btn btn-success" onclick="clickbtn( 'qtd${data[z].idProduto}', '${data[z].idProduto}', '${data[z].nomeProduto}','{{ url('').'/storage/img/'}}${data[z].imagemProduto}' , '${data[z].descricaoProduto}')"  id="btn_plus_${data[z].idProduto}"><i class="fa fa-plus-circle" aria-hidden="true"></i></button>
+                <button class="btn btn-danger" name="menos_${data[z].idProduto}" onclick="remover( '${data[z].idProduto}' )"  id="btn_minus_${data[z].idProduto}"><i class="fa fa-minus-circle" aria-hidden="true"></i></button>
+            </div>
+        </div>
+    </div>
+</div><!-- end div row -->`;
+}
+
+
+/** --------------------------------------------------------------------------- */
+}
 
         $(".ProdutosListados").html(mostraTxt);
-
     }
+
+
 );
 /** ----------------------------------------------------------------------------------- */
 

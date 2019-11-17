@@ -21,10 +21,8 @@ Route::resource('/produtos', 'ProdutosController');
 Route::get('produtos/mudarstatus/{id}', 'ProdutosController@bloquear');
 Route::get('produtos/excluir/{id}', 'ProdutosController@remover');
 
-
-/** Apontando Post para o Controlador */
-Route::post('/pedidos/store', 'PedidosController@store');
-
 /*** Rotas Dos Pedidos */
 Route::get('/pedidos','PedidosController@index' );
+
+
 

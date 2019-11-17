@@ -30,13 +30,13 @@
 
 
 
-<div class="row produtodetalhe" >
+<div class="row produtodetalhe" style="margin-left:auto; margin-right:auto; max-width:100%">
 
 <div class="col-12"  style="border-bottom: dashed 1px #ccc;padding-top:15px;  padding-bottom: 15px" >
 
     <div class="row">
 
-    <div class="col-2" style="max-width:100px;">
+    <div class="col-2">
         <img src="{{ url('').'/storage/img/'.$produto->imagemProduto }}" width="75px" height="75px" alt="..." class="img-thumbnail">
     </div>
 
